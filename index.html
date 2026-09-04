@@ -1,663 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Happy Rakshabandhan</title>
-<style>
-  :root {
-    --gold: #c9a24b;
-    --gold-light: #f0d9a0;
-    --navy-deep: #060c22;
-    --navy: #0d1a3d;
-    --lotus-pink: #e0629a;
-    --lotus-pink-light: #f4a6c8;
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    background: radial-gradient(ellipse at 50% 0%, #16204a 0%, #05091c 75%);
-    font-family: 'Georgia', 'Times New Roman', serif;
-    color: var(--gold-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 16px 40px;
-    overflow-x: hidden;
-    position: relative;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Apology for You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* ambient floating background petals */
-  .bg-petals {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-  }
+        body {
+            background: radial-gradient(circle at center, #1b0f24 0%, #09040d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
 
-  .heading {
-    text-align: center;
-    margin-bottom: 18px;
-    position: relative;
-    z-index: 1;
-  }
-  .heading .small {
-    font-size: 12px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    opacity: 0.85;
-  }
-  .heading h1 {
-    font-size: 26px;
-    margin: 6px 0 0;
-    font-weight: 400;
-    letter-spacing: 1px;
-    background: linear-gradient(180deg, #fbe9c4, #c9a24b);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
+        /* Ambient floating particles background */
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
 
-  .card-wrap {
-    position: relative;
-    width: 100%;
-    max-width: 420px;
-    aspect-ratio: 1058 / 1450;
-    border-radius: 18px;
-    overflow: hidden;
-    z-index: 1;
-    box-shadow:
-      0 0 0 1px rgba(201,162,75,0.5),
-      0 20px 50px rgba(0,0,0,0.55),
-      0 0 50px rgba(224,98,154,0.12);
-  }
+        .sparkle {
+            position: absolute;
+            background: #ffb7c5;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatParticle 6s infinite ease-in-out;
+        }
 
-  .card-image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+        @keyframes floatParticle {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-40px) scale(1.3); opacity: 0.8; }
+        }
 
-  canvas.scratch-layer {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    touch-action: none;
-    cursor: pointer;
-  }
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
 
-  canvas.particle-layer {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
+        /* Lotus Flower Styling */
+        .lotus-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-  .hint {
-    margin-top: 16px;
-    font-size: 13px;
-    letter-spacing: 1px;
-    color: rgba(240,217,160,0.75);
-    text-align: center;
-    transition: opacity 0.6s ease;
-    z-index: 1;
-  }
-  .hint.hidden { opacity: 0; }
+        .lotus {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            animation: gentleFloat 4s ease-in-out infinite alternate;
+        }
 
-  .reveal-note {
-    margin-top: 14px;
-    font-size: 13px;
-    color: rgba(240,217,160,0.65);
-    text-align: center;
-    max-width: 340px;
-    line-height: 1.6;
-    opacity: 0;
-    transition: opacity 0.9s ease;
-    z-index: 1;
-  }
-  .reveal-note.show { opacity: 1; }
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-10px) rotate(2deg); }
+        }
 
-  .reset-btn {
-    margin-top: 22px;
-    background: transparent;
-    border: 1px solid rgba(201,162,75,0.6);
-    color: var(--gold-light);
-    padding: 9px 22px;
-    border-radius: 999px;
-    font-family: inherit;
-    font-size: 13px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-    z-index: 1;
-  }
-  .reset-btn.show { opacity: 1; pointer-events: auto; }
-  .reset-btn:active { background: rgba(201,162,75,0.15); }
-</style>
+        /* Lotus Petals */
+        .petal {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            width: 36px;
+            height: 90px;
+            background: linear-gradient(135deg, #ff9bbd 0%, #ff4b8b 100%);
+            border-radius: 50% 50% 20% 20%;
+            transform-origin: bottom center;
+            opacity: 0.95;
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+            animation: bloom 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        /* Petal Layering & Rotation for Blooming Effect */
+        .petal.inner-1 { transform: translateX(-50%) rotate(0deg) scale(0.8); animation-delay: 0.2s; background: linear-gradient(135deg, #ffb3cc 0%, #ff6699 100%); }
+        .petal.inner-2 { transform: translateX(-50%) rotate(30deg) scale(0.85); animation-delay: 0.4s; }
+        .petal.inner-3 { transform: translateX(-50%) rotate(-30deg) scale(0.85); animation-delay: 0.4s; }
+        
+        .petal.mid-1 { transform: translateX(-50%) rotate(55deg); animation-delay: 0.6s; }
+        .petal.mid-2 { transform: translateX(-50%) rotate(-55deg); animation-delay: 0.6s; }
+        .petal.mid-3 { transform: translateX(-50%) rotate(20deg); animation-delay: 0.8s; }
+        .petal.mid-4 { transform: translateX(-50%) rotate(-20deg); animation-delay: 0.8s; }
+
+        .petal.outer-1 { transform: translateX(-50%) rotate(80deg) scale(0.9); animation-delay: 1s; background: linear-gradient(135deg, #ff85b3 0%, #e6005c 100%); }
+        .petal.outer-2 { transform: translateX(-50%) rotate(-80deg) scale(0.9); animation-delay: 1s; background: linear-gradient(135deg, #ff85b3 0%, #e6005c 100%); }
+        .petal.outer-3 { transform: translateX(-50%) rotate(45deg); animation-delay: 1.2s; }
+        .petal.outer-4 { transform: translateX(-50%) rotate(-45deg); animation-delay: 1.2s; }
+
+        @keyframes bloom {
+            0% {
+                transform: translateX(-50%) rotate(0deg) scale(0.1);
+                opacity: 0;
+            }
+            100% {
+                opacity: 0.95;
+            }
+        }
+
+        /* Lotus Center Glow */
+        .lotus-core {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #fff380 0%, #ffcc00 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 25px #ffea75;
+            animation: coreGlow 3s ease-in-out infinite alternate;
+            z-index: 10;
+        }
+
+        @keyframes coreGlow {
+            0% { transform: translateX(-50%) scale(0.9); box-shadow: 0 0 15px #ffcc00; }
+            100% { transform: translateX(-50%) scale(1.1); box-shadow: 0 0 30px #ffee55; }
+        }
+
+        /* Water Base / Ripple Effect */
+        .base-water {
+            position: absolute;
+            bottom: -10px;
+            width: 160px;
+            height: 15px;
+            background: rgba(255, 153, 204, 0.2);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+            animation: pulseRipple 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseRipple {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Typography Styling */
+        .message-box {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealText 1.5s ease 1.8s forwards;
+        }
+
+        @keyframes revealText {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 600;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #fff 0%, #ffb6c1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: #d8b4e2;
+            max-width: 450px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+    </style>
 </head>
 <body>
 
-  <canvas class="bg-petals" id="bgPetals"></canvas>
+    <div class="sparkles" id="sparkles"></div>
 
-  <div class="heading">
-    <div class="small">A little something for you</div>
-    <h1>Scratch to Reveal</h1>
-  </div>
+    <div class="container">
+        <div class="lotus-container">
+            <div class="lotus">
+                <div class="petal inner-1"></div>
+                <div class="petal inner-2"></div>
+                <div class="petal inner-3"></div>
+                
+                <div class="petal mid-1"></div>
+                <div class="petal mid-2"></div>
+                <div class="petal mid-3"></div>
+                <div class="petal mid-4"></div>
 
-  <div class="card-wrap" id="cardWrap">
-    <img class="card-image" id="cardImage" src="data:image/png;base64,__IMAGE_BASE64__" alt="Rakshabandhan Gift Card">
-    <canvas class="scratch-layer" id="scratchCanvas"></canvas>
-    <canvas class="particle-layer" id="particleCanvas"></canvas>
-  </div>
+                <div class="petal outer-1"></div>
+                <div class="petal outer-2"></div>
+                <div class="petal outer-3"></div>
+                <div class="petal outer-4"></div>
 
-  <div class="hint" id="hint">✦ swipe your finger across the lotus ✦</div>
-  <div class="reveal-note" id="revealNote">Happy Rakshabandhan, Chelli. Keep this code &amp; PIN safe — redeem it anytime at nykaa.com 💛</div>
-  <button class="reset-btn" id="resetBtn">Scratch again</button>
+                <div class="lotus-core"></div>
+            </div>
+            <div class="base-water"></div>
+        </div>
 
-<script>
-(function () {
-  const wrap = document.getElementById('cardWrap');
-  const canvas = document.getElementById('scratchCanvas');
-  const ctx = canvas.getContext('2d');
-  const pCanvas = document.getElementById('particleCanvas');
-  const pCtx = pCanvas.getContext('2d');
-  const hint = document.getElementById('hint');
-  const revealNote = document.getElementById('revealNote');
-  const resetBtn = document.getElementById('resetBtn');
+        <div class="message-box">
+            <h1>Sorry, Chelliammaa</h1>
+            <p>Just like this lotus blooming through the water, I hope you can find it in your heart to forgive me. You mean the absolute world to me.</p>
+        </div>
+    </div>
 
-  let dpr = Math.max(window.devicePixelRatio || 1, 1);
-  let W = 0, H = 0;
-  let revealed = false;
+    <script>
+        // Generate dynamic floating background sparkles
+        const sparklesContainer = document.getElementById('sparkles');
+        const numberOfSparkles = 35;
 
-  // ============ Lotus petal drawing helper ============
-  // Draws a single petal shape centered at origin, pointing up (-Y), before transform.
-  function petalPath(ctx, length, width) {
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.bezierCurveTo(width * 0.55, -length * 0.25, width * 0.42, -length * 0.75, 0, -length);
-    ctx.bezierCurveTo(-width * 0.42, -length * 0.75, -width * 0.55, -length * 0.25, 0, 0);
-    ctx.closePath();
-  }
-
-  function drawLotus(ctx, cx, cy, size, petalCount, colorOuter, colorInner, alpha) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.globalAlpha = alpha;
-    for (let ring = 0; ring < 2; ring++) {
-      const ringScale = ring === 0 ? 1 : 0.62;
-      const ringRot = ring === 0 ? 0 : (Math.PI / petalCount);
-      for (let i = 0; i < petalCount; i++) {
-        const angle = (i / petalCount) * Math.PI * 2 + ringRot;
-        ctx.save();
-        ctx.rotate(angle);
-        const grad = ctx.createLinearGradient(0, 0, 0, -size * ringScale);
-        grad.addColorStop(0, colorInner);
-        grad.addColorStop(1, colorOuter);
-        ctx.fillStyle = grad;
-        petalPath(ctx, size * ringScale, size * ringScale * 0.42);
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-    ctx.restore();
-  }
-
-  function drawLotusOutline(ctx, cx, cy, size, petalCount, strokeColor, alpha) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.globalAlpha = alpha;
-    ctx.strokeStyle = strokeColor;
-    ctx.lineWidth = Math.max(1, size * 0.02);
-    for (let i = 0; i < petalCount; i++) {
-      const angle = (i / petalCount) * Math.PI * 2;
-      ctx.save();
-      ctx.rotate(angle);
-      petalPath(ctx, size, size * 0.42);
-      ctx.stroke();
-      ctx.restore();
-    }
-    ctx.restore();
-  }
-
-  // ============ Scratch cover ============
-  function drawCover() {
-    // deep navy background matching the card
-    const grad = ctx.createRadialGradient(W / 2, H * 0.35, H * 0.05, W / 2, H * 0.5, H * 0.85);
-    grad.addColorStop(0, '#16224a');
-    grad.addColorStop(0.55, '#0c1636');
-    grad.addColorStop(1, '#05091d');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-
-    // faint gold sparkle speckles
-    ctx.save();
-    for (let i = 0; i < 90; i++) {
-      const x = Math.random() * W;
-      const y = Math.random() * H;
-      const r = Math.random() * 1.1 + 0.2;
-      ctx.globalAlpha = Math.random() * 0.35 + 0.05;
-      ctx.fillStyle = '#e8cd8a';
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    // large faint lotus outlines, top-left and bottom-right (matches card corners)
-    drawLotusOutline(ctx, W * 0.16, H * 0.14, W * 0.22, 8, 'rgba(201,162,75,0.28)', 1);
-    drawLotusOutline(ctx, W * 0.85, H * 0.9, W * 0.24, 8, 'rgba(201,162,75,0.22)', 1);
-
-    // central decorative lotus (solid, pink/gold) behind the text, low opacity
-    drawLotus(ctx, W / 2, H * 0.5, W * 0.34, 10, 'rgba(224,98,154,0.16)', 'rgba(244,166,200,0.22)', 1);
-
-    // gold border
-    ctx.save();
-    ctx.strokeStyle = 'rgba(232,205,138,0.9)';
-    ctx.lineWidth = Math.max(3, W * 0.01);
-    ctx.strokeRect(ctx.lineWidth / 2, ctx.lineWidth / 2, W - ctx.lineWidth, H - ctx.lineWidth);
-    ctx.restore();
-
-    // small lotus bud flourishes in corners
-    ctx.save();
-    ctx.fillStyle = 'rgba(232,205,138,0.75)';
-    [[0.07,0.06],[0.93,0.06],[0.07,0.94],[0.93,0.94]].forEach(([fx, fy]) => {
-      const cx = W * fx, cy = H * fy;
-      const s = W * 0.014;
-      ctx.save();
-      ctx.translate(cx, cy);
-      petalPath(ctx, s * 2.2, s);
-      ctx.fill();
-      ctx.restore();
-    });
-    ctx.restore();
-
-    // small divider ornament above/below text
-    function ornament(cy) {
-      ctx.save();
-      ctx.strokeStyle = 'rgba(232,205,138,0.75)';
-      ctx.fillStyle = 'rgba(232,205,138,0.85)';
-      ctx.lineWidth = 1;
-      const halfLen = W * 0.16;
-      ctx.beginPath();
-      ctx.moveTo(W / 2 - halfLen, cy);
-      ctx.lineTo(W / 2 - W * 0.03, cy);
-      ctx.moveTo(W / 2 + W * 0.03, cy);
-      ctx.lineTo(W / 2 + halfLen, cy);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(W / 2, cy, W * 0.008, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-    ornament(H * 0.335);
-    ornament(H * 0.685);
-
-    // Text
-    ctx.save();
-    ctx.fillStyle = '#f6e6b8';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0,0,0,0.4)';
-    ctx.shadowBlur = W * 0.02;
-
-    const line1 = 'TO MY';
-    const line2 = 'DEAREST';
-    const line3 = 'CHELLI';
-
-    const fontSize1 = W * 0.07;
-    const fontSize2 = W * 0.125;
-
-    ctx.font = `400 ${fontSize1}px Georgia, serif`;
-    ctx.letterSpacing = (W * 0.018) + 'px';
-    ctx.fillText(line1, W / 2, H * 0.41);
-
-    ctx.font = `400 ${fontSize2}px 'Times New Roman', Georgia, serif`;
-    ctx.letterSpacing = (W * 0.008) + 'px';
-    ctx.fillStyle = '#f4a6c8';
-    ctx.shadowColor = 'rgba(224,98,154,0.35)';
-    ctx.fillText(line2, W / 2, H * 0.505);
-    ctx.fillText(line3, W / 2, H * 0.615);
-
-    ctx.font = `italic 400 ${W * 0.03}px Georgia, serif`;
-    ctx.fillStyle = '#f6e6b8';
-    ctx.letterSpacing = '0px';
-    ctx.globalAlpha = 0.85;
-    ctx.shadowBlur = 0;
-    ctx.fillText('— scratch the lotus to open —', W / 2, H * 0.655 + H * 0.065);
-    ctx.restore();
-  }
-
-  function sizeCanvas() {
-    const rect = wrap.getBoundingClientRect();
-    W = Math.round(rect.width);
-    H = Math.round(rect.height);
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    pCanvas.width = W * dpr;
-    pCanvas.height = H * dpr;
-    pCanvas.style.width = W + 'px';
-    pCanvas.style.height = H + 'px';
-    pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    particles = [];
-
-    drawCover();
-    revealed = false;
-    canvas.style.transition = 'none';
-    canvas.style.opacity = '1';
-    canvas.style.pointerEvents = 'auto';
-    hint.classList.remove('hidden');
-    revealNote.classList.remove('show');
-    resetBtn.classList.remove('show');
-  }
-
-  function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    let clientX, clientY;
-    if (e.touches && e.touches.length) {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-    return { x: clientX - rect.left, y: clientY - rect.top };
-  }
-
-  function scratchAt(x, y) {
-    const baseRadius = Math.max(W, H) * 0.05;
-    ctx.globalCompositeOperation = 'destination-out';
-    const points = 10;
-    ctx.beginPath();
-    for (let i = 0; i <= points; i++) {
-      const angle = (i / points) * Math.PI * 2;
-      const wobble = 0.7 + Math.random() * 0.5;
-      const r = baseRadius * wobble;
-      const px = x + Math.cos(angle) * r;
-      const py = y + Math.sin(angle) * r;
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-    }
-    ctx.closePath();
-    ctx.fill();
-    for (let i = 0; i < 2; i++) {
-      const sa = Math.random() * Math.PI * 2;
-      const sd = baseRadius * (0.6 + Math.random() * 0.5);
-      const sr = baseRadius * (0.15 + Math.random() * 0.25);
-      ctx.beginPath();
-      ctx.arc(x + Math.cos(sa) * sd, y + Math.sin(sa) * sd, sr, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  // ============ Petal particle system (scratch flecks) ============
-  let particles = [];
-  const petalPalette = [
-    ['#f4a6c8', '#e0629a'],
-    ['#f9c9dd', '#e884ac'],
-    ['#f0d9a0', '#c9a24b'],
-    ['#ffffff', '#f4a6c8']
-  ];
-
-  function spawnParticles(x, y, count) {
-    for (let i = 0; i < count; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 0.8 + Math.random() * 2.6;
-      const colors = petalPalette[Math.floor(Math.random() * petalPalette.length)];
-      particles.push({
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 1.6,
-        size: 4 + Math.random() * 6,
-        life: 1,
-        decay: 0.012 + Math.random() * 0.016,
-        colorA: colors[0],
-        colorB: colors[1],
-        rot: Math.random() * Math.PI * 2,
-        vrot: (Math.random() - 0.5) * 0.22,
-        swayPhase: Math.random() * Math.PI * 2,
-        swayAmp: 0.3 + Math.random() * 0.5
-      });
-    }
-    if (particles.length > 260) particles.splice(0, particles.length - 260);
-  }
-
-  function drawPetalParticle(pc, p) {
-    pc.save();
-    pc.globalAlpha = Math.max(p.life, 0);
-    pc.translate(p.x, p.y);
-    pc.rotate(p.rot);
-    const grad = pc.createLinearGradient(0, 0, 0, -p.size);
-    grad.addColorStop(0, p.colorB);
-    grad.addColorStop(1, p.colorA);
-    pc.fillStyle = grad;
-    petalPath(pc, p.size, p.size * 0.5);
-    pc.fill();
-    pc.restore();
-  }
-
-  let animRunning = false;
-  function animateParticles() {
-    pCtx.clearRect(0, 0, W, H);
-    let alive = false;
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      p.life -= p.decay;
-      if (p.life <= 0) { particles.splice(i, 1); continue; }
-      alive = true;
-      p.swayPhase += 0.12;
-      p.x += p.vx + Math.sin(p.swayPhase) * p.swayAmp;
-      p.y += p.vy;
-      p.vy += 0.12; // gravity
-      p.vx *= 0.98;
-      p.rot += p.vrot;
-      drawPetalParticle(pCtx, p);
-    }
-    if (alive) {
-      requestAnimationFrame(animateParticles);
-    } else {
-      animRunning = false;
-    }
-  }
-  function ensureAnimating() {
-    if (!animRunning) {
-      animRunning = true;
-      requestAnimationFrame(animateParticles);
-    }
-  }
-
-  let checkTimer = null;
-  function scheduleCheck() {
-    if (checkTimer) return;
-    checkTimer = setTimeout(() => {
-      checkTimer = null;
-      checkRevealProgress();
-    }, 120);
-  }
-
-  function checkRevealProgress() {
-    if (revealed) return;
-    const imgData = ctx.getImageData(0, 0, W, H);
-    const data = imgData.data;
-    let cleared = 0, total = 0;
-    const step = 4 * 37; // sample every 37th pixel
-    for (let i = 3; i < data.length; i += step) {
-      total++;
-      if (data[i] < 40) cleared++;
-    }
-    const pct = cleared / total;
-    if (pct > 0.55) revealCard();
-  }
-
-  function revealCard() {
-    revealed = true;
-    canvas.style.transition = 'opacity 0.7s ease';
-    canvas.style.opacity = '0';
-    canvas.style.pointerEvents = 'none';
-    hint.classList.add('hidden');
-    revealNote.classList.add('show');
-    resetBtn.classList.add('show');
-  }
-
-  let drawing = false;
-  let lastPos = null;
-
-  function pointerDown(e) {
-    drawing = true;
-    hint.classList.add('hidden');
-    const p = getPos(e);
-    lastPos = p;
-    scratchAt(p.x, p.y);
-    spawnParticles(p.x, p.y, 5);
-    ensureAnimating();
-    scheduleCheck();
-  }
-  function pointerMove(e) {
-    if (!drawing) return;
-    const p = getPos(e);
-    if (lastPos) {
-      const dist = Math.hypot(p.x - lastPos.x, p.y - lastPos.y);
-      const steps = Math.max(1, Math.floor(dist / 6));
-      for (let i = 1; i <= steps; i++) {
-        const ix = lastPos.x + (p.x - lastPos.x) * (i / steps);
-        const iy = lastPos.y + (p.y - lastPos.y) * (i / steps);
-        scratchAt(ix, iy);
-        if (i % 2 === 0) spawnParticles(ix, iy, 2);
-      }
-    } else {
-      scratchAt(p.x, p.y);
-      spawnParticles(p.x, p.y, 2);
-    }
-    ensureAnimating();
-    lastPos = p;
-    scheduleCheck();
-  }
-  function pointerUp() {
-    drawing = false;
-    lastPos = null;
-  }
-
-  canvas.addEventListener('mousedown', (e) => { pointerDown(e); });
-  canvas.addEventListener('mousemove', (e) => { pointerMove(e); });
-  window.addEventListener('mouseup', pointerUp);
-
-  canvas.addEventListener('touchstart', (e) => { e.preventDefault(); pointerDown(e); }, { passive: false });
-  canvas.addEventListener('touchmove', (e) => { e.preventDefault(); pointerMove(e); }, { passive: false });
-  canvas.addEventListener('touchend', (e) => { e.preventDefault(); pointerUp(); }, { passive: false });
-
-  resetBtn.addEventListener('click', () => {
-    sizeCanvas();
-  });
-
-  window.addEventListener('resize', () => {
-    dpr = Math.max(window.devicePixelRatio || 1, 1);
-    sizeCanvas();
-  });
-
-  const cardImage = document.getElementById('cardImage');
-  if (cardImage.complete) {
-    sizeCanvas();
-  } else {
-    cardImage.addEventListener('load', sizeCanvas);
-  }
-  setTimeout(() => { if (W === 0) sizeCanvas(); }, 300);
-})();
-
-// ============ Ambient background floating petals (page-wide) ============
-(function () {
-  const bg = document.getElementById('bgPetals');
-  const bctx = bg.getContext('2d');
-  let dpr = Math.max(window.devicePixelRatio || 1, 1);
-  let bw = 0, bh = 0;
-  let petals = [];
-
-  function petalPathBg(ctx, length, width) {
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.bezierCurveTo(width * 0.55, -length * 0.25, width * 0.42, -length * 0.75, 0, -length);
-    ctx.bezierCurveTo(-width * 0.42, -length * 0.75, -width * 0.55, -length * 0.25, 0, 0);
-    ctx.closePath();
-  }
-
-  function resize() {
-    bw = window.innerWidth;
-    bh = window.innerHeight;
-    bg.width = bw * dpr;
-    bg.height = bh * dpr;
-    bg.style.width = bw + 'px';
-    bg.style.height = bh + 'px';
-    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const colors = [['#f4a6c8','#e0629a'], ['#f0d9a0','#c9a24b'], ['#f9c9dd','#e884ac']];
-
-  function makePetal() {
-    const c = colors[Math.floor(Math.random() * colors.length)];
-    return {
-      x: Math.random() * bw,
-      y: -20 - Math.random() * bh * 0.5,
-      size: 6 + Math.random() * 7,
-      speed: 0.25 + Math.random() * 0.45,
-      sway: 0.3 + Math.random() * 0.6,
-      swayPhase: Math.random() * Math.PI * 2,
-      rot: Math.random() * Math.PI * 2,
-      vrot: (Math.random() - 0.5) * 0.01,
-      colorA: c[0],
-      colorB: c[1],
-      alpha: 0.12 + Math.random() * 0.18
-    };
-  }
-  const count = window.innerWidth < 480 ? 9 : 14;
-  for (let i = 0; i < count; i++) {
-    const p = makePetal();
-    p.y = Math.random() * bh;
-    petals.push(p);
-  }
-
-  function loop() {
-    bctx.clearRect(0, 0, bw, bh);
-    petals.forEach((p) => {
-      p.swayPhase += 0.01;
-      p.y += p.speed;
-      p.x += Math.sin(p.swayPhase) * p.sway * 0.3;
-      p.rot += p.vrot;
-      if (p.y > bh + 20) {
-        Object.assign(p, makePetal());
-        p.y = -20;
-      }
-      bctx.save();
-      bctx.globalAlpha = p.alpha;
-      bctx.translate(p.x, p.y);
-      bctx.rotate(p.rot);
-      const grad = bctx.createLinearGradient(0, 0, 0, -p.size);
-      grad.addColorStop(0, p.colorB);
-      grad.addColorStop(1, p.colorA);
-      bctx.fillStyle = grad;
-      petalPathBg(bctx, p.size, p.size * 0.5);
-      bctx.fill();
-      bctx.restore();
-    });
-    requestAnimationFrame(loop);
-  }
-  loop();
-})();
-</script>
+        for (let i = 0; i < numberOfSparkles; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            
+            // Random positioning and sizing
+            sparkle.style.left = `${Math.random() * 100}%`;
+            sparkle.style.top = `${Math.random() * 100}%`;
+            
+            const size = Math.random() * 4 + 2;
+            sparkle.style.width = `${size}px`;
+            sparkle.style.height = `${size}px`;
+            
+            // Random animation delay and duration
+            sparkle.style.animationDuration = `${Math.random() * 3 + 3}s`;
+            sparkle.style.animationDelay = `${Math.random() * 3}s`;
+            
+            sparklesContainer.appendChild(sparkle);
+        }
+    </script>
 </body>
 </html>
